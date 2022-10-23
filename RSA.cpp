@@ -1,3 +1,50 @@
+/**
+ * @file RSA.cpp
+ * @author gun (lxuegod@163.com)
+ * @brief 
+ * @version 0.1
+ * @date 2022-10-23
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+问题描述：
+计算n=p*q, ψ(n)=(p-1)(q-1)
+随机选取整数e(1<e<ψ(n))，满足gcd(e,ψ(n))=1
+计算d，满足d*e=1(mod ψ(n)) 
+注：n公开， p和q保密。e为公钥，d为私钥
+
+签名算法：
+利用一个安全的Hash函数h来产生消息摘要h(m)
+用签名算法计算签名s=Signk(m)=h(m)^d mod n
+
+验证算法：
+首先利用一个安全的Hash函数h计算消息摘要h(m)
+用检验等式h(m) mod n=se mod n 是否成立，若相等签名有效；否则，签名无效。
+由于s=h(m)^d mod n
+d*e=1(modψ(n))
+所以se mod n=h(m)^(ed) mod n
+= h(m)^(kψ(n)+1) mod n
+= h(m)*h(m)^(kψ(n)) mod n
+= h(m)*((h(m)^ψ(n))^k) mod n
+= h(m)
+
+实例：
+初始化：
+假设A选取p = 13，q = 11，e = 13，则有n = p*q = 143，φ(n) = (p-1)*(q-1) = 12×10 = 120。
+求解e*d = 13*d ≡ 1(mod 120) 得 d = 37
+因此：A的公钥为(n = 143,e = 13)；私钥为d = 37
+
+签名过程：
+假定消息m的Hash值h(m) = 16，则计算m签名s = h(m)^d mod n =  1637 mod 143 = 3
+
+验证过程：
+接受者B收到签名后，计算s*e mod n = 313 mod 143 = 16，h(m) mod n = 16 mod 143 = 16
+等式 h(m) mod n = s*e mod n成立。因此，B验证此签名有效。
+注：^为幂运算，*为乘运算
+ */
+
+
+
 #include <iostream>
 #include <conio.h>
 using namespace std;

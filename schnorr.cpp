@@ -1,3 +1,61 @@
+/**
+ * @file schnorr.cpp
+ * @author gun (lxuegod@163.com)
+ * @brief 
+ * @version 0.1
+ * @date 2022-10-23
+ * 
+ * @copyright Copyright (c) 2022
+ * 问题描述：
+ * 
+初始化：
+首先选择一个大素数p，使在Zp中求解离散对数困难。然后选择一个生成元g∈Zp*，g^q ≡1(mod p)
+最后选取随机数 1<x<q，计算y≡g^x	mod p，则公钥为(p,q,g,y)，私钥为x。
+
+签名：
+用户选择随机数k，对消息进行如下计算得签名值(e,s).  r≡g^k mod p
+e=H(r,m)  s≡x*e+k mod q
+
+验证：
+接收方在收到消息m和签名值(e,s)后，进行以下步骤：
+计算r1≡((g^s)*(y^(-e))) mod p
+计算H(r1,m)
+验证等式：H(r1,m)=e
+如果等式成立，接受签名，否则签名无效。
+
+签名体制的正确性证明：  
+r1 ≡g^s*y^(-e) mod p 
+≡g^s*g^(-x*e) mod p
+≡g^(s-x*e) mod p
+≡g^(x*e+k-x*e) mod p
+≡g^k mod p
+≡r  
+H(r1,m)=e
+r≡g^k mod p；e=H(r,m); s≡(x*e+k) mod q
+
+实例：
+初始化：
+假设A选取素数p = 23和q = 11，其中(p-1)/ q = 2，选取生成元h = 11∈Zp* 。
+并计算g = h^((p-1)/q) mod p = 11^2 mod 23 ≡6，
+则有 g^q mod p = [h^((p-1)/q) mod p]^q mod p = h^(p-1) mod p ≡1
+既然g≠1，那么g生成Zp* 中一个11阶循环子群。然后选取私钥x = 10 
+计算y = g^x mod p = 610 mod 23 ≡ 4
+则A的公钥是（p = 23,q = 11,g = 6,y = 4）, 私钥为（x = 10）
+
+签名过程：
+选取随机数k = 9，1≤k≤10，计算r = g^k mod p = 69 mod 23 = 16。
+设有e = h(m||r) = 13 ，计算s = (x*e+k) mod q = (10×13 + 9) mod 11 ≡ 7。
+因此消息m的签名为（e = 13,s = 7）
+
+验证过程：
+签名接收者B计算r1 = g^s*y^(-e) mod p = 67×4-13 mod 23= 16 ≡r
+则有 h(m || r1) = h(m || r) = e = 13 
+因此B接受签名
+
+注：^为幂运算，*为乘运算
+ */
+
+
 #include <iostream>
 #include <stdlib.h>
 #include <stdio.h>
