@@ -1,0 +1,7 @@
+# local env files
+.history*
+*.exe
+
+
+# Editor directories and files
+.vscode
